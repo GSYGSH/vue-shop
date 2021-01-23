@@ -22,7 +22,7 @@
                       <template slot-scope='scope'>
                           <el-tag v-if="scope.row.cat_level === 0" type='primary' size='mini'>一级</el-tag>
                           <el-tag v-else-if="scope.row.cat_level === 1" type='success' size='mini'>二级</el-tag>
-                          <el-tag v-else="scope.row.cat_level === 2" type='warning' size='mini'>三级</el-tag>
+                          <el-tag v-else type='warning' size='mini'>三级</el-tag>
                       </template>
                   </el-table-column>
                   <el-table-column  label='操作' width='200px'>
@@ -167,15 +167,18 @@ export default {
                 if(!valid){
                     this.$mes.error('请按要求填写表单')
                 }else{
-                    if(this.checkValue.length == 0 || this.checkValue.length == 3){
+                    if( this.checkValue.length == 3){
                         this.$mes.error('请选择一二级分类')
                     }else{
                         if(this.checkValue.length === 1){
+                            this.addForm.cat_pid = this.checkValue[0]
+                            this.addForm.cat_level = 1
+                        }else if(this.checkValue.length == 0){
                             this.addForm.cat_pid = 0
                             this.addForm.cat_level = 0
                         }else{
                             this.addForm.cat_pid = this.checkValue[1]
-                            this.addForm.cat_level = 1
+                            this.addForm.cat_level = 2
                         }
                         console.log(this.checkValue);
                         let {data:res} = await this.$http.post(`categories`,this.addForm)
