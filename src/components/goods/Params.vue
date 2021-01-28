@@ -46,7 +46,7 @@
                                     @blur="handleInputConfirm(scope.row)"
                                     >
                                     </el-input>
-                                    <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+添加动态参数</el-button>
+                                    <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+添加</el-button>
                                 </div>
                             </template>
                         </el-table-column>
@@ -63,8 +63,8 @@
                     </el-table>
                 </el-tab-pane>
 
-                <el-tab-pane label="静态参数" name="only">
-                    <el-button type='primary' :disabled='checkValue.length === 0' @click="addDialogVisible = true">静态参数</el-button>
+                <el-tab-pane label="静态属性" name="only">
+                    <el-button type='primary' :disabled='checkValue.length === 0' @click="addDialogVisible = true">静态属性</el-button>
                     <el-table :data='paramsList' border stripe >
                         <el-table-column type='expand'>
                             <template slot-scope='scope'>
@@ -83,13 +83,13 @@
                                     @blur="handleInputConfirm(scope.row)"
                                     >
                                     </el-input>
-                                    <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+添加动态参数</el-button>
+                                    <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+添加</el-button>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column type='index' label='序号' width='50px' > 
                         </el-table-column>
-                        <el-table-column prop='attr_name' label='参数名称'  > 
+                        <el-table-column prop='attr_name' label='属性名称'  > 
                         </el-table-column>
                         <el-table-column  label='操作' width='300px'> 
                             <template slot-scope='scope'>
