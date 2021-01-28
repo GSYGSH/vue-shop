@@ -162,7 +162,7 @@ export default {
             addParamsForm:{
                 attr_name:'',
                 attr_sel:'',
-                attr_vals:'可任意添加属性'
+                attr_vals:''
             },
             addRules:{
                 attr_name:[
@@ -200,10 +200,13 @@ export default {
                     res.data.forEach((item,index)=>{
                         for(let k  in item){
                             if(k === 'attr_vals'){
-                                
-
+                            
                                 /* 内部添加要 绑定的值和显示隐藏值 */
-                                this.$set(this.paramsList[index],'attr_vals',item[k].split(','))
+                                if(item[k] === ''){
+                                    this.$set(this.paramsList[index],'attr_vals',[])
+                                }else{
+                                    this.$set(this.paramsList[index],'attr_vals',item[k].split(','))
+                                }
                                 this.$set(this.paramsList[index],'inputVisible',false)
                                 this.$set(this.paramsList[index],'inputValue','')
                                 /* this.paramsList.forEach(i =>{}) */

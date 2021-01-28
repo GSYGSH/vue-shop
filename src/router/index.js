@@ -10,7 +10,8 @@ const Rights = () => import('@/components/power/Rights.vue')
 const Roles = () => import('@/components/power/Roles.vue')
 const Cate = () => import('@/components/goods/Cate.vue')
 const Params = () => import('@/components/goods/Params.vue')
-const Goods = ()=>import('@/components/goods/Goods.vue')
+const Goods = () => import('@/components/goods/Goods.vue')
+const Add = () => import('@/components/goods/Add.vue')
 
 Vue.use(VueRouter)
 
@@ -27,7 +28,11 @@ const routes = [
             { path: '/roles', component: Roles },
             { path: '/categories', component: Cate },
             { path: '/params', component: Params },
-            { path: '/goods', component: Goods }
+            {
+                path: '/goods', component: Goods, children: [
+                {path:'add',component: Add}
+            ] },
+
         ]
     },
     { path: '*', redirect: to => { return '/home' } }
