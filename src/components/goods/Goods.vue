@@ -10,12 +10,12 @@
           <div>
               <el-row :gutter='10'>
                   <el-col :span='8'>
-                      <el-input placeholder="请输入内容" v-model="params.query" class="input-with-select">
-                      <el-button slot="append" icon="el-icon-search"></el-button>
+                      <el-input placeholder="请输入内容" v-model="params.query" class="input-with-select" clearable @clear='getGoodsList()'>
+                      <el-button slot="append" icon="el-icon-search" @click="getGoodsList()"></el-button>
                       </el-input>
                   </el-col>
                   <el-col :span='4'>
-                      <el-button type='primary' class="addBtn">添加商品</el-button>
+                      <el-button type='primary' class="addBtn" @click="addGoods">添加商品</el-button>
                   </el-col>
               </el-row>
               <el-table :data='goodsList' border stripe>
@@ -31,8 +31,8 @@
                   <el-table-column  label='操作' width='300px'>
                       <template slot-scope='scope'>
                           <div>
-                              <el-button type='primary' size='mini' @click="editDialog(scope.row)">编辑</el-button>
-                              <el-button type='danger' size='mini'>删除</el-button>
+                              <el-button type='primary' size='mini' @click="editGoods">编辑</el-button>
+                              <el-button type='danger' size='mini' @click="deleteGoods(scope.row.goods_id)">删除</el-button>
                           </div>
                       </template>
                   </el-table-column>
@@ -45,23 +45,9 @@
                     :page-sizes="[5, 10, 20, 30]"
                     :page-size="params.pagesize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="total">
+                    :total="total"
+                    background>
                 </el-pagination> 
-              <!-- 编辑 -->
-<!--             <el-dialog
-            title="提示"
-            :visible.sync="editDialogVisible"
-            width="50%">
-            <el-form >
-                <el-form-item >
-                    <el-input ></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogClose">取 消</el-button>
-                <el-button type="primary" @click="editDialogSubmit">确 定</el-button>
-            </span>
-            </el-dialog> -->
           </div>
       </template>
   </main-layout>
@@ -82,16 +68,6 @@ export default {
                 pagesize:10
             },
             total:0,
-            /* 编辑 */
-/*             editDialogVisible:false,
-            editGoodsForm:{
-                goods_name:'',
-                goods_price:'',
-                goods_number:'',
-                goods_weight:'',
-                goods_introduce:'',
-                pics
-            } */
         }
     },
     created(){
@@ -118,17 +94,29 @@ export default {
             this.params.pagenum = newPage
             this.getGoodsList()
         },
-        /* 编辑商品 */
-/*         editDialog(row){
-
-            this.editDialogVisible = true
+        addGoods(){
+            this.$router.push('/goods/add')
         },
-        editDialogClose(){
-
+        editGoods(){
+            /* this.$router.push('/goods/edit') */
         },
-        editDialogSubmit(){
-
-        } */
+        deleteGoods(id){
+            this.$confirm('是否删除删除商品,是否继续?','提示',{
+                confirmButtonText:'确定',
+                cancelButtonText:'取消',
+                type:'warning'
+            }).then(async ()=>{
+                let {data:res} = await this.$http.delete(`goods/${id}`)
+                if(res.meta.status !== 200){
+                    this.$mes.error(res.meta.msg)
+                }else{
+                    this.$mes.success(res.meta.msg)
+                    this.getGoodsList()
+                }
+            }).catch(()=>{
+                this.$mes.info('已取消删除')
+            })
+        },
     }
 }
 </script>
