@@ -13,6 +13,10 @@ import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
 Vue.use(VueQuillEditor, /* { default global options } */)
 
+/* 进度条 */
+import Nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 Vue.prototype.$http = axios
 axios.defaults.baseURL = 'http://120.53.120.229:8888/api/private/v1/'/* 'https://www.liulongbin.top:8888/api/private/v1/'; */
 
@@ -31,7 +35,12 @@ Vue.filter('dateFormat', function (item) {
 
 
 axios.interceptors.request.use(config => {
+  Nprogress.start()
   config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
+axios.interceptors.response.use(config => {
+  Nprogress.done()
   return config
 })
 
