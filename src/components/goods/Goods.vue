@@ -95,10 +95,10 @@ export default {
             this.getGoodsList()
         },
         addGoods(){
-            /* this.$router.push('/goods/add') */
+            this.$router.push('/goods/add')
         },
         editGoods(){
-            this.$router.push('/goods/edit')
+            /* this.$router.push('/goods/edit') */
         },
         deleteGoods(id){
             this.$confirm('是否删除删除商品,是否继续?','提示',{
