@@ -8,8 +8,8 @@
           <el-row :gutter="10">
             <!-- 搜索框 -->
             <el-col :span="8">
-              <el-input placeholder="请输入内容" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-input placeholder="请输入内容" class="input-with-select" v-model="params.query" clearable @clear='getUserList'>
+                <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
               </el-input>
             </el-col>
             <el-col :span="4">
