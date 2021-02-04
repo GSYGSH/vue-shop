@@ -20,7 +20,7 @@
           unique-opened
           :collapse='isCollapse'
           :collapse-transition='false'
-          :default-active='$route.path'
+          :default-active='activePath'
           
         >
           <el-submenu
@@ -68,6 +68,7 @@ export default {
         145: "el-icon-chat-dot-square",
       },
       isCollapse:false,
+      activePath:''
     };
   },
   methods: {
@@ -80,6 +81,15 @@ export default {
       this.MenuList = res.data;
     },
   },
+  watch:{
+    activePath(){
+      if(this.$route.path === '/goods/add'){
+        this.activePath = '/goods'
+      }else{
+        this.activePath = $route.path
+      }
+    }
+  }
 };
 </script>
 
