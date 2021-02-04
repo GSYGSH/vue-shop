@@ -6,6 +6,13 @@ import './element/index'
 import '@/assets/css/base.css'
 import axios from 'axios'
 
+/* 富文本编辑器 */
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
+Vue.use(VueQuillEditor, /* { default global options } */)
+
 Vue.prototype.$http = axios
 axios.defaults.baseURL = /* 'http://120.53.120.229:8888/api/private/v1/' */'https://www.liulongbin.top:8888/api/private/v1/';
 
