@@ -56,6 +56,7 @@
             :page-size="params.pagesize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
+            background
           >
           </el-pagination>
           <!-- 添加用户对话框 -->

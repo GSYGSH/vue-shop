@@ -40,7 +40,8 @@
                     :page-sizes="[5, 10, 20, 30]"
                     :page-size="params.pagesize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="total">
+                    :total="total"
+                    background>
                 </el-pagination>    
               <!-- 添加分类 -->
                 <el-dialog
