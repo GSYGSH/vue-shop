@@ -26,12 +26,12 @@
               label="序号"
               width="50px"
             ></el-table-column>
-            <el-table-column prop="username" label="用户名" width="180">
+            <el-table-column prop="username" label="用户名" width="180px">
             </el-table-column>
-            <el-table-column prop="email" label="邮箱" width="180">
+            <el-table-column prop="email" label="邮箱" width="180px">
             </el-table-column>
-            <el-table-column prop="mobile" label="号码"> </el-table-column>
-            <el-table-column prop="role_name" label="角色"> </el-table-column>
+            <el-table-column prop="mobile" label="号码" width='180px'> </el-table-column>
+            <el-table-column prop="role_name" label="角色" min-width='180px'> </el-table-column>
             <el-table-column prop="mg_state" label="状态" width="300px">
               <template slot-scope="scope">
                 <el-button
@@ -43,7 +43,7 @@
                 <el-button size="mini" type="danger" @click="deleteUserDialog(scope.row.id)"
                   >删除</el-button
                 >
-                <el-button size="mini" type="warning">分配角色</el-button>
+                <el-button size="mini" type="warning" @click="addRoleDialog(scope.row)">分配角色</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -131,6 +131,38 @@
               >
             </span>
           </el-dialog>
+          <!-- 添加角色 -->
+          <el-dialog
+            title="分配角色"
+            :visible.sync="addRoleDialogVisible"
+            width="50%"
+          >
+          <el-form  >
+            <el-form-item label='当前用户:'>
+              {{addRoleForm.username}}
+            </el-form-item>            
+            <el-form-item label='当前角色:'>
+              {{addRoleForm.role_name}}
+            </el-form-item>            
+            <el-form-item label='分配角色'>
+              <el-select v-model="addRoleForm.rid" placeholder="请选择">
+                <el-option
+                  v-for="item in roleOption"
+                  :key="item.id"
+                  :label="item.roleName"
+                  :value="item.id">
+                </el-option>
+              </el-select>                  
+            </el-form-item>
+
+          </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="addRoleDialogClose">取 消</el-button>
+              <el-button type="primary" @click="addRoleDialogSubmit"
+                >确 定</el-button
+              >
+            </span>
+          </el-dialog>
         </div>
       </template>
     </main-layout>
@@ -179,6 +211,7 @@ export default {
       addDialogVisible: false,
       editDialogVisible: false,
       deleteDialogVisible:false,
+      addRoleDialogVisible:false,
       /* 添加用户数据 */
       addUserForm: {
         username: "",
@@ -215,7 +248,15 @@ export default {
         mobile: "",
       },
       /* 删除用户 */
-      deleteID:''
+      deleteID:'',
+      /* 分配角色 */
+      addRoleForm:{
+        id:'',
+        rid:'',
+        role_name:'',
+        username:'',
+      },
+      roleOption:[]
     };
   },
   created() {
@@ -326,7 +367,42 @@ export default {
             this.deleteDialogVisible = false;
           }
     },
-    /* 查询 */
+    /* 添加角色 */
+    async addRoleDialog(row){
+      let {data:res} = await this.$http.get(`roles`)
+      if(res.meta.status !== 200){
+        this.$mes.error(res.meta.msg)
+      }else{
+        console.log(res);
+        this.roleOption = res.data
+      }
+      
+      for(let k in row){
+        for(let key in this.addRoleForm){
+          if(k === key){
+            this.addRoleForm[key] = row[k]
+          }
+        }
+      }
+      this.addRoleDialogVisible = true
+    },
+    addRoleDialogClose(){
+      this.addDialogVisible = false
+    },
+    async addRoleDialogSubmit(){
+      let {data:res} = await this.$http.put(`users/${this.addRoleForm.id}/role`,this.addRoleForm)
+      console.log(res);
+      if(res.meta.status !== 200){
+        this.$mes.error(res.meta.msg)
+      }else{
+        for(let k in this.addRoleForm){
+          this.addRoleForm[k] = ''
+        }
+        this.$mes.success(res.meta.msg)
+        this.getUserList()
+        this.addRoleDialogVisible = false
+      }
+    }
     
   },
 };
