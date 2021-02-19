@@ -4,7 +4,7 @@
     <template #title2> 数据报表 </template>
     <template #default>
         <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-        <div id="main" style="width: 750px; height: 400px"></div>
+        <div id="main" style="height: 400px"></div>
     </template>
   </main-layout>
 </template>
@@ -18,6 +18,10 @@ export default {
   },
   created() {},
   async mounted() {
+        // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'),'');
+            myChart.showLoading()    
+
         /* 获取数据 */
         let {data:res} = await this.$http.get(`reports/type/1`)
         if(res.meta.status !== 200){
@@ -26,18 +30,49 @@ export default {
         }else{
             console.log(res);
 
+            myChart.hideLoading()
 
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
+            window.onresize = function(){
+              myChart.resize()
+            }
             
             /* 绘制图表，合并选项 */
             const result = Object.assign(this.options,res.data)
             console.log(result);
-            result.xAxis[0].boundaryGap = false
 
 
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(result);                 
+
+            // 使用刚指定的配置项和数据显示图表。 
+            myChart.setOption(result); 
+            let option = {
+              xAxis:{
+                boundaryGap:false
+              },
+              legend:{
+                icon:'circle',
+                itemWidth:20,
+                itemHeight:20,
+                itemGap:30
+              },
+              series:[
+                {
+                  smooth:true
+                },
+                {
+                  smooth:true
+                },
+                {
+                  smooth:true
+                },
+                {
+                  smooth:true
+                },
+                {
+                  smooth:true
+                },
+              ]
+            }
+            myChart.setOption(option)                
         }
 
  
@@ -47,7 +82,15 @@ export default {
         /* 需要合并的数据 */
         options: {
         title: {
-          text: '用户来源'
+          text: '用户来源',
+          textStyle:{
+            color:"red"
+          },
+          borderWidth:5,
+          borderColor:'#eee',
+          borderRadius:10,
+          top:10,
+          left:10
         },
         tooltip: {
           trigger: 'axis',
@@ -56,6 +99,16 @@ export default {
             label: {
               backgroundColor: '#E9EEF3'
             }
+          }
+        },
+        toolbox:{
+          feature:{
+            saveAsImage:{},
+            dataView:{},
+            restore:{},
+            magicType:{
+              type:['line','bar']
+            },
           }
         },
         grid: {
@@ -73,7 +126,7 @@ export default {
           {
             type: 'value'
           }
-        ]
+        ],
       }
     };
   },
