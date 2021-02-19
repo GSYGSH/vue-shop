@@ -39,6 +39,7 @@ export default {
   },
   destroyed() {
     clearInterval(this.timerID)
+    window.removeEventListener('resize',this.resize)
   },
   async mounted(){
     this.myChart = echarts.init(this.$refs.echarts_box)
@@ -65,6 +66,7 @@ export default {
     this.myChart.setOption(option)
     this.updateChart()
      this.echartMove()
+     window.addEventListener('resize',this.resize)
   },
   computed:{
     cateTitle(){
@@ -73,7 +75,6 @@ export default {
   },
   methods:{
     updateChart(){
-      console.log(1);
       let legendArr = this.cateData[this.currentIndex].children.map(item=>{
         return item.cat_name
       })
@@ -131,7 +132,11 @@ export default {
         }
           this.updateChart()
       }, 2000);
+    },
+    resize(){
+      this.myChart.resize()
     }
+
   }
 }
 </script>
@@ -142,27 +147,24 @@ h2{
     margin: 0;
     padding: 0;
 }
-.echarts{
-  width: 100%;
-  height: 100%;
-}
 .wel-box{
   width: 100%;
   height: 500px;
   display: flex;
   justify-content: space-evenly;
-  div{
-    background-color: #eee;
-    border-radius:20px;
-  }
-  .left{
-    flex:1;
-    margin-right:20px;
-    text-align: center;
-    padding-top: 150px;
-  }
-  .right{
-    flex:1
-  }
+    div{
+      background-color: #eee;
+      border-radius:20px;
+    }
+    .left{
+      width: 50%;
+      margin-right:20px;
+      text-align: center;
+      padding-top: 150px;
+    }
+    .right{
+      width: 50%;
+      height: 100%;
+    }
 }
 </style>
